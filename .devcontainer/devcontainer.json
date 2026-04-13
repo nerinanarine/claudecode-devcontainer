@@ -1,0 +1,41 @@
+{
+    "name": "Claude Code",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "args": {
+            "USERNAME": "vscode",
+            "USER_UID": "1000",
+            "USER_GID": "1000"
+        }
+    },
+    "workspaceFolder": "/workspace",
+    "remoteUser": "vscode",
+    // ホストの ~/.claude ディレクトリをコンテナにマウント
+    "mounts": [
+        "source=${localEnv:USERPROFILE}/.claude,target=/home/vscode/.claude,type=bind,consistency=cached"
+    ],
+    // .env ファイルから環境変数を読み込む
+    "runArgs": ["--env-file", "${localWorkspaceFolder}/.devcontainer/.env"],
+    // 固定値の環境変数
+    "remoteEnv": {
+        "CLAUDE_CODE_USE_BEDROCK": "1"
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "anthropic.claude-vscode",
+                "mhutchie.git-graph",
+                "bierner.markdown-mermaid"
+            ],
+            "settings": {
+                "terminal.integrated.defaultProfile.linux": "bash",
+                "terminal.integrated.profiles.linux": {
+                    "bash": {
+                        "path": "/bin/bash"
+                    }
+                }
+            }
+        }
+    },
+    "postCreateCommand": "echo '✅ Claude Code DevContainer ready! Run: claude' && claude --version"
+}
