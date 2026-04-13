@@ -11,8 +11,10 @@
     "workspaceFolder": "/workspace",
     "remoteUser": "vscode",
     // ホストの ~/.claude ディレクトリをコンテナにマウント
+    // ホストの %USERPROFILE%/work をコンテナの /work にマウント
     "mounts": [
-        "source=${localEnv:USERPROFILE}/.claude,target=/home/vscode/.claude,type=bind,consistency=cached"
+        "source=${localEnv:USERPROFILE}/.claude,target=/home/vscode/.claude,type=bind,consistency=cached",
+        "source=${localEnv:USERPROFILE}/work,target=/work,type=bind,consistency=cached"
     ],
     // .env ファイルから環境変数を読み込む
     "runArgs": ["--env-file", "${localWorkspaceFolder}/.devcontainer/.env"],
@@ -23,7 +25,7 @@
     "customizations": {
         "vscode": {
             "extensions": [
-                "anthropic.claude-vscode",
+                "anthropic.claude-code",
                 "mhutchie.git-graph",
                 "bierner.markdown-mermaid"
             ],

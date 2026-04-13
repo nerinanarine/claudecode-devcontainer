@@ -59,7 +59,17 @@ if (-not (Test-Path "$env:USERPROFILE\.claude")) {
 }
 ```
 
-### 4. DevContainer の起動
+### 4. 作業フォルダ `%USERPROFILE%/work` の確認
+
+ホスト側の `%USERPROFILE%/work` はコンテナ内 `/work` にマウントされます。存在しない場合は作成してください。
+
+```powershell
+if (-not (Test-Path "$env:USERPROFILE\work")) {
+    New-Item -ItemType Directory "$env:USERPROFILE\work"
+}
+```
+
+### 5. DevContainer の起動
 
 VS Code でフォルダを開き、コマンドパレット (`Ctrl+Shift+P`) から実行:
 
@@ -86,7 +96,8 @@ VS Code (ホスト)
   └── DevContainer 起動
         ├── .devcontainer/.env を読み込み（AWS_REGION, AWS_BEARER_TOKEN_BEDROCK）
         ├── CLAUDE_CODE_USE_BEDROCK=1 を設定（Bedrock モードを有効化）
-        └── ~/.claude をマウント（認証情報・設定の永続化）
+    ├── ~/.claude をマウント（認証情報・設定の永続化）
+    └── %USERPROFILE%/work を /work にマウント（作業用フォルダ）
 ```
 
 ## トラブルシューティング
