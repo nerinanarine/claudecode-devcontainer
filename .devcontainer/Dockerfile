@@ -11,6 +11,8 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
         less \
         jq \
         bash-completion \
+        python3 \
+        python3-pip \
     && apt-get autoremove -y \
     && rm -rf /var/lib/apt/lists/*
 
