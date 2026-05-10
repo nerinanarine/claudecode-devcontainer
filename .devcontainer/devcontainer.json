@@ -11,10 +11,8 @@
     "workspaceFolder": "/workspace",
     "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
     "remoteUser": "vscode",
-    // ホストの ~/.claude ディレクトリをコンテナにマウント
     // 現在開いている DevContainer フォルダ内の work をコンテナの /work にマウント
     "mounts": [
-        "source=${localEnv:USERPROFILE}/.claude,target=/home/vscode/.claude,type=bind,consistency=cached",
         "source=${localWorkspaceFolder}/work,target=/work,type=bind,consistency=cached"
     ],
     // .env ファイルから環境変数を読み込む
@@ -36,5 +34,5 @@
             }
         }
     },
-    "postCreateCommand": "echo '✅ Claude Code DevContainer ready! Run: claude' && claude --version"
+    "postCreateCommand": "mkdir -p ~/.claude && cp .devcontainer/claude/settings.json ~/.claude/settings.json && echo '✅ Claude Code DevContainer ready! Run: claude' && claude --version"
 }
