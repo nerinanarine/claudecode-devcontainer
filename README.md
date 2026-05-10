@@ -20,7 +20,9 @@ claudecode-devcontainer/
     ├── Dockerfile               # Node.js 22 ベース + Claude Code インストール
     ├── devcontainer.json        # DevContainer 設定
     ├── .env                     # 認証情報（★要編集・git 管理対象外）
-    └── .env.example             # .env のテンプレート
+    ├── .env.example             # .env のテンプレート
+    └── claude/
+        └── settings.json        # Claude Code 設定（テーマ・更新チャンネルなど）
 ```
 
 ## セットアップ手順
@@ -71,17 +73,7 @@ ANTHROPIC_DEFAULT_OPUS_MODEL=claude-opus-4-7
 
 > **注意**: `.env` はシークレット情報を含むため、`.gitignore` によって git 管理対象外になっています。リポジトリにコミットしないでください。
 
-### 3. `~/.claude` ディレクトリの確認
-
-Claude Code の設定・セッション情報を保持するディレクトリです。存在しない場合は作成してください。
-
-```powershell
-if (-not (Test-Path "$env:USERPROFILE\.claude")) {
-    New-Item -ItemType Directory "$env:USERPROFILE\.claude"
-}
-```
-
-### 4. 作業フォルダ `%USERPROFILE%/work` の確認
+### 3. 作業フォルダ `%USERPROFILE%/work` の確認
 
 ホスト側の `%USERPROFILE%/work` はコンテナ内 `/work` にマウントされます。存在しない場合は作成してください。
 
@@ -91,7 +83,7 @@ if (-not (Test-Path "$env:USERPROFILE\work")) {
 }
 ```
 
-### 5. DevContainer の起動
+### 4. DevContainer の起動
 
 VS Code でフォルダを開き、コマンドパレット (`Ctrl+Shift+P`) から実行:
 
@@ -125,7 +117,7 @@ claude
 VS Code (ホスト)
   └── DevContainer 起動
         ├── .devcontainer/.env を読み込み（バックエンド設定・認証情報）
-        ├── ~/.claude をマウント（認証情報・設定の永続化）
+        ├── claude/settings.json を ~/.claude/ にコピー（設定の適用）
         └── %USERPROFILE%/work を /work にマウント（作業用フォルダ）
 ```
 
