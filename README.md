@@ -22,7 +22,9 @@ claudecode-devcontainer/
     ├── .env                     # 認証情報（★要編集・git 管理対象外）
     ├── .env.example             # .env のテンプレート
     └── claude/
-        └── settings.json        # Claude Code 設定（テーマ・更新チャンネルなど）
+        ├── settings.json        # Claude Code 設定（テーマ・更新チャンネルなど）
+        ├── skills/              # インストール済みスキル
+        └── plugins/             # プラグイン・マーケットプレイス設定
 ```
 
 ## セットアップ手順
@@ -117,7 +119,7 @@ claude
 VS Code (ホスト)
   └── DevContainer 起動
         ├── .devcontainer/.env を読み込み（バックエンド設定・認証情報）
-        ├── claude/settings.json を ~/.claude/ にコピー（設定の適用）
+        ├── claude/ 以下を ~/.claude/ にコピー（設定・スキル・プラグインの適用）
         └── %USERPROFILE%/work を /work にマウント（作業用フォルダ）
 ```
 

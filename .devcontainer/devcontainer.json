@@ -34,5 +34,5 @@
             }
         }
     },
-    "postCreateCommand": "mkdir -p ~/.claude && cp .devcontainer/claude/settings.json ~/.claude/settings.json && echo '✅ Claude Code DevContainer ready! Run: claude' && claude --version"
+    "postCreateCommand": "mkdir -p ~/.claude && cp .devcontainer/claude/settings.json ~/.claude/settings.json && cp -r .devcontainer/claude/skills ~/.claude/ && cp -r .devcontainer/claude/plugins ~/.claude/ && echo '✅ Claude Code DevContainer ready! Run: claude' && claude --version"
 }
