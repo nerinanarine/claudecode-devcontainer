@@ -1,7 +1,7 @@
 # Claude Code DevContainer
 
 Visual Studio Code の DevContainer で [Claude Code](https://docs.anthropic.com/ja/docs/claude-code) を利用するための環境です。  
-バックエンドとして **Amazon Bedrock** を使用します。
+バックエンドとして **Amazon Bedrock** または **Azure AI Foundry** を使用できます。
 
 ## 前提条件
 
@@ -34,17 +34,39 @@ cd claudecode-devcontainer
 
 ### 2. `.env` ファイルの作成
 
-`.devcontainer/.env.example` をコピーして `.env` を作成し、実際の値を設定します。
+`.devcontainer/.env.example` をコピーして `.env` を作成します。
 
 ```powershell
 Copy-Item .devcontainer\.env.example .devcontainer\.env
 ```
 
-`.devcontainer\.env` を開いて編集:
+`.devcontainer\.env` を開いて使用するバックエンドのセクションを編集します。
+
+#### オプション A: Amazon Bedrock を使う場合
 
 ```env
+CLAUDE_CODE_USE_BEDROCK=1
 AWS_REGION=us-east-1
 AWS_BEARER_TOKEN_BEDROCK=（実際のBearer Tokenを入力）
+```
+
+Foundry のセクション（オプション B）はコメントアウトのままにしてください。
+
+#### オプション B: Azure AI Foundry を使う場合
+
+Bedrock のセクション（オプション A）をコメントアウトし、Foundry のセクションを有効にします。
+
+```env
+# CLAUDE_CODE_USE_BEDROCK=1
+# AWS_REGION=us-east-1
+# AWS_BEARER_TOKEN_BEDROCK=...
+
+CLAUDE_CODE_USE_FOUNDRY=1
+ANTHROPIC_FOUNDRY_RESOURCE=claudecode-nerina
+ANTHROPIC_FOUNDRY_API_KEY=（実際のAPIキーを入力）
+ANTHROPIC_DEFAULT_SONNET_MODEL=claude-sonnet-4-6
+ANTHROPIC_DEFAULT_HAIKU_MODEL=claude-haiku-4-5
+ANTHROPIC_DEFAULT_OPUS_MODEL=claude-opus-4-7
 ```
 
 > **注意**: `.env` はシークレット情報を含むため、`.gitignore` によって git 管理対象外になっています。リポジトリにコミットしないでください。
@@ -79,6 +101,14 @@ Dev Containers: Reopen in Container
 
 初回はイメージのビルドが行われるため数分かかります。
 
+## バックエンドの切り替え
+
+`.devcontainer/.env` を編集して使用するバックエンドを切り替えられます。切り替え後はコンテナを再起動してください。
+
+```
+Dev Containers: Rebuild Container
+```
+
 ## Claude Code の使用
 
 コンテナ起動後、VS Code の統合ターミナルで以下を実行します。
@@ -94,10 +124,9 @@ claude
 ```
 VS Code (ホスト)
   └── DevContainer 起動
-        ├── .devcontainer/.env を読み込み（AWS_REGION, AWS_BEARER_TOKEN_BEDROCK）
-        ├── CLAUDE_CODE_USE_BEDROCK=1 を設定（Bedrock モードを有効化）
-    ├── ~/.claude をマウント（認証情報・設定の永続化）
-    └── %USERPROFILE%/work を /work にマウント（作業用フォルダ）
+        ├── .devcontainer/.env を読み込み（バックエンド設定・認証情報）
+        ├── ~/.claude をマウント（認証情報・設定の永続化）
+        └── %USERPROFILE%/work を /work にマウント（作業用フォルダ）
 ```
 
 ## トラブルシューティング
@@ -107,7 +136,8 @@ VS Code (ホスト)
 | コンテナが起動しない | Docker Desktop が起動しているか確認 |
 | `claude` コマンドが見つからない | コンテナを Rebuild する: `Dev Containers: Rebuild Container` |
 | Bedrock 認証エラー | `.env` の `AWS_BEARER_TOKEN_BEDROCK` の値と `AWS_REGION` を確認 |
-| トークン期限切れ | `.env` の `AWS_BEARER_TOKEN_BEDROCK` を更新後、コンテナを再起動 |
+| Foundry 認証エラー | `.env` の `ANTHROPIC_FOUNDRY_API_KEY` と `ANTHROPIC_FOUNDRY_RESOURCE` を確認 |
+| トークン期限切れ | `.env` の認証情報を更新後、コンテナを再起動 |
 
 ## Amazon Bedrock の有効化
 

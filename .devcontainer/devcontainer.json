@@ -19,10 +19,6 @@
     ],
     // .env ファイルから環境変数を読み込む
     "runArgs": ["--env-file", "${localWorkspaceFolder}/.devcontainer/.env"],
-    // 固定値の環境変数
-    "remoteEnv": {
-        "CLAUDE_CODE_USE_BEDROCK": "1"
-    },
     "customizations": {
         "vscode": {
             "extensions": [
