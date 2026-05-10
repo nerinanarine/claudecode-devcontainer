@@ -75,13 +75,13 @@ ANTHROPIC_DEFAULT_OPUS_MODEL=claude-opus-4-7
 
 > **注意**: `.env` はシークレット情報を含むため、`.gitignore` によって git 管理対象外になっています。リポジトリにコミットしないでください。
 
-### 3. 作業フォルダ `%USERPROFILE%/work` の確認
+### 3. 作業フォルダ `work/` の確認
 
-ホスト側の `%USERPROFILE%/work` はコンテナ内 `/work` にマウントされます。存在しない場合は作成してください。
+リポジトリ直下の `work/` フォルダがコンテナ内 `/work` にマウントされます。存在しない場合は作成してください。
 
 ```powershell
-if (-not (Test-Path "$env:USERPROFILE\work")) {
-    New-Item -ItemType Directory "$env:USERPROFILE\work"
+if (-not (Test-Path "work")) {
+    New-Item -ItemType Directory "work"
 }
 ```
 
