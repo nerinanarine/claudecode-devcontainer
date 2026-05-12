@@ -22,7 +22,11 @@
             "extensions": [
                 "anthropic.claude-code",
                 "mhutchie.git-graph",
-                "bierner.markdown-mermaid"
+                "bierner.markdown-mermaid",
+                "janisdd.vscode-edit-csv",
+                "github.vscode-pull-request-github",
+                "ms-python.python"
+
             ],
             "settings": {
                 "terminal.integrated.defaultProfile.linux": "bash",
