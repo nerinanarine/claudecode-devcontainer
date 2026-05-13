@@ -123,6 +123,37 @@ VS Code (ホスト)
         └── %USERPROFILE%/work を /work にマウント（作業用フォルダ）
 ```
 
+## VSCode 拡張機能の追加
+
+DevContainer に VSCode 拡張機能を追加するには、`.devcontainer/devcontainer.json` の `customizations.vscode.extensions` にマーケットプレイスの拡張機能 ID を追記します。
+
+### 拡張機能 ID の確認方法
+
+VS Code の拡張機能パネルで対象の拡張機能を右クリックし「**Copy Extension ID**」を選択するか、[Visual Studio Marketplace](https://marketplace.visualstudio.com/) の拡張機能ページ右側に表示されている ID（例: `ms-python.python`）を使用します。
+
+### 追記例
+
+```jsonc
+"customizations": {
+    "vscode": {
+        "extensions": [
+            "anthropic.claude-code",
+            "mhutchie.git-graph",
+            "ms-python.python",
+            "追加したい拡張機能のID"  // ← ここに追記
+        ]
+    }
+}
+```
+
+### 反映方法
+
+追記後、コンテナを再ビルドすると拡張機能がインストールされます。
+
+```
+Dev Containers: Rebuild Container
+```
+
 ## トラブルシューティング
 
 | 症状 | 対処法 |
