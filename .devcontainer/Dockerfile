@@ -37,6 +37,13 @@ RUN if ! getent group "$USER_GID" > /dev/null 2>&1; then groupadd --gid "$USER_G
 # Install Claude Code globally
 RUN npm install -g @anthropic-ai/claude-code
 
+# Embed Claude Code configuration into the image
+RUN mkdir -p /home/${USERNAME}/.claude/skills /home/${USERNAME}/.claude/plugins
+
+COPY --chown=${USERNAME}:${USERNAME} claude/settings.json /home/${USERNAME}/.claude/settings.json
+COPY --chown=${USERNAME}:${USERNAME} claude/skills/ /home/${USERNAME}/.claude/skills/
+COPY --chown=${USERNAME}:${USERNAME} claude/plugins/ /home/${USERNAME}/.claude/plugins/
+
 USER $USERNAME
 
-WORKDIR /workspace
+WORKDIR /work
