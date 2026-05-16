@@ -15,16 +15,24 @@ Visual Studio Code の DevContainer で [Claude Code](https://docs.anthropic.com
 
 ```
 claudecode-devcontainer/
-├── .gitignore                   # .env を git 管理対象外に設定
+├── .gitignore                   # .env / 会話履歴を git 管理対象外に設定
+├── .claude/                     # Claude Code ランタイムデータ（コンテナにbind mount）
+│   ├── settings.json            #   ユーザー設定（セッションをまたいで保持）
+│   ├── skills/                  #   使用中のスキル（セッションで追加したものも保持）
+│   ├── plugins/                 #   プラグイン設定
+│   ├── memory/                  #   自動メモリ
+│   ├── plans/                   #   プランファイル
+│   └── projects/                #   会話履歴（git 管理対象外）
 └── .devcontainer/
     ├── Dockerfile               # Node.js 22 ベース + Claude Code インストール
     ├── devcontainer.json        # DevContainer 設定
+    ├── init-claude.sh           # コンテナ起動時の初期化スクリプト
     ├── .env                     # 認証情報（★要編集・git 管理対象外）
     ├── .env.example             # .env のテンプレート
-    └── claude/
-        ├── settings.json        # Claude Code 設定（テーマ・更新チャンネルなど）
-        ├── skills/              # インストール済みスキル
-        └── plugins/             # プラグイン・マーケットプレイス設定
+    └── claude/                  # デフォルトSkills/Pluginsのテンプレート（git管理）
+        ├── settings.json        #   初期設定（初回起動時のみ .claude/ へコピー）
+        ├── skills/              #   デフォルトスキル（起動時に未追加分を .claude/ へ追加）
+        └── plugins/             #   プラグイン設定（初回起動時のみ .claude/ へコピー）
 ```
 
 ## セットアップ手順
@@ -119,9 +127,20 @@ claude
 VS Code (ホスト)
   └── DevContainer 起動
         ├── .devcontainer/.env を読み込み（バックエンド設定・認証情報）
-        ├── claude/ 以下を ~/.claude/ にコピー（設定・スキル・プラグインの適用）
-        └── %USERPROFILE%/work を /work にマウント（作業用フォルダ）
+        ├── .claude/ を /home/vscode/.claude/ にbind mount（会話履歴・設定を永続化）
+        ├── work/ を /work にマウント（作業用フォルダ）
+        └── init-claude.sh を実行
+              ├── 初回: .devcontainer/claude/ のテンプレートを .claude/ へコピー
+              └── 2回目以降: 未追加のデフォルトSkillのみ追加（既存データは保持）
 ```
+
+### Skills/Plugins の管理
+
+| 目的 | 追加・編集場所 |
+|---|---|
+| チーム全員に配布するデフォルトSkill | `.devcontainer/claude/skills/` |
+| 自分のカスタムSkill（セッションで作成） | `.claude/skills/` に自動保存・リビルド後も保持 |
+| デフォルトSkillを更新して反映 | `.devcontainer/claude/` を編集 → Rebuild → 未追加分が自動追加 |
 
 ## VSCode 拡張機能の追加
 
