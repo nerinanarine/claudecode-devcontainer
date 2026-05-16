@@ -37,6 +37,11 @@ RUN if ! getent group "$USER_GID" > /dev/null 2>&1; then groupadd --gid "$USER_G
 # Install Claude Code globally
 RUN npm install -g @anthropic-ai/claude-code
 
+# Install uv and Speckit (specify-cli)
+RUN curl -LsSf https://astral.sh/uv/install.sh | UV_INSTALL_DIR=/usr/local/bin sh \
+    && UV_TOOL_DIR=/opt/uv-tools UV_TOOL_BIN_DIR=/usr/local/bin \
+       uv tool install specify-cli --from git+https://github.com/github/spec-kit.git
+
 # Store Claude Code defaults in /opt/claude-defaults/
 # (~/.claude/ is bind-mounted from host at runtime; init-claude.sh merges these on container start)
 RUN mkdir -p /opt/claude-defaults/skills /opt/claude-defaults/plugins
