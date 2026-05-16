@@ -10,6 +10,9 @@
     },
     "workspaceFolder": "/work",
     "workspaceMount": "source=${localWorkspaceFolder}/work,target=/work,type=bind,consistency=cached",
+    "mounts": [
+        "source=${localWorkspaceFolder}/.claude,target=/home/vscode/.claude,type=bind,consistency=cached"
+    ],
     "remoteUser": "vscode",
     // .env ファイルから環境変数を読み込む
     "runArgs": ["--env-file", "${localWorkspaceFolder}/.devcontainer/.env"],
@@ -34,5 +37,5 @@
             }
         }
     },
-    "postCreateCommand": "echo '✅ Claude Code DevContainer ready! Run: claude' && claude --version"
+    "postCreateCommand": "bash /usr/local/bin/init-claude.sh"
 }

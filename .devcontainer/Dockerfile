@@ -37,12 +37,15 @@ RUN if ! getent group "$USER_GID" > /dev/null 2>&1; then groupadd --gid "$USER_G
 # Install Claude Code globally
 RUN npm install -g @anthropic-ai/claude-code
 
-# Embed Claude Code configuration into the image
-RUN mkdir -p /home/${USERNAME}/.claude/skills /home/${USERNAME}/.claude/plugins
+# Store Claude Code defaults in /opt/claude-defaults/
+# (~/.claude/ is bind-mounted from host at runtime; init-claude.sh merges these on container start)
+RUN mkdir -p /opt/claude-defaults/skills /opt/claude-defaults/plugins
 
-COPY --chown=${USERNAME}:${USERNAME} claude/settings.json /home/${USERNAME}/.claude/settings.json
-COPY --chown=${USERNAME}:${USERNAME} claude/skills/ /home/${USERNAME}/.claude/skills/
-COPY --chown=${USERNAME}:${USERNAME} claude/plugins/ /home/${USERNAME}/.claude/plugins/
+COPY claude/settings.json /opt/claude-defaults/settings.json
+COPY claude/skills/ /opt/claude-defaults/skills/
+COPY claude/plugins/ /opt/claude-defaults/plugins/
+COPY init-claude.sh /usr/local/bin/init-claude.sh
+RUN chmod +x /usr/local/bin/init-claude.sh
 
 USER $USERNAME
 

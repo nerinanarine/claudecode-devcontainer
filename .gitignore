@@ -4,3 +4,6 @@
 # work ディレクトリの中身はリポジトリに含めない（フォルダ自体は含める）
 work/*
 !work/.gitkeep
+
+# Claude Code の会話履歴（大容量・個人情報を含むためgit管理外）
+.claude/projects/
